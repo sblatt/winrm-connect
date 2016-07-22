@@ -1,0 +1,46 @@
+#!/usr/bin/python
+import sys
+import winrm
+import fileinput
+
+server = sys.argv[1]
+from winrm.protocol import Protocol
+p = Protocol(
+    endpoint='https://'+server+':5986/wsman',
+    transport='kerberos',
+    username=None,
+    password=None,
+    server_cert_validation='ignore')
+
+console_string = "["+server+"]: CMD >"
+shell_id = p.open_shell()
+## shell is either cmd or ps
+current_shell = "cmd"
+while True:
+  runcommand = raw_input(console_string)
+  runcommand.strip()
+  command_id = p.run_command(shell_id, runcommand, '')
+  if runcommand == 'exit':
+    if current_shell == "cmd":
+      break
+    elif current_shell == "ps":
+      current_shell = "cmd"
+  elif runcommand == 'powershell' or runcommand == "ps":
+    current_shell = "ps"
+  else:
+    if current_shell == "ps":
+      runcommand = "powershell "+runcommand
+    command_id = p.run_command(shell_id, runcommand, '')
+    std_out, std_err, status_code = p.get_command_output(shell_id, command_id)
+    print std_out+std_err
+  if current_shell == "cmd":
+    console_string = "["+server+"]: CMD >"
+  elif current_shell == "ps":
+    console_string = "["+server+"]: PS >"
+
+
+p.cleanup_command(shell_id, command_id)
+p.close_shell(shell_id)
+
+
+
