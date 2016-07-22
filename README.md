@@ -8,7 +8,9 @@ When in powershell context type exit to switch back to cmd.<br />
 The initial goal is to have a wrapper to easily connect to Windows machines. Uses pywinrm.
 
 <h2>Prequisites</h2>
-You will need a working kerberos configuration (tested with machines joined with realmd) and a valid Kerberos ticket (klist)
+You will need a working kerberos configuration (tested with machines joined with realmd) and a valid Kerberos ticket (klist).<br />
+You will also need a winrm activated windows machine.
+Packages:
 * pywinrm
 * requests-kerberos
 
