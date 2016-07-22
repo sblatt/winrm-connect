@@ -2,9 +2,43 @@
 import sys
 import winrm
 import fileinput
-
-server = sys.argv[1]
+from base64 import b64encode
 from winrm.protocol import Protocol
+
+def print_usage():
+  print sys.argv[0]+" SERVER [SCRIPT]"
+
+if len(sys.argv) < 2:
+  print_usage()
+  sys.exit(0)
+
+if len(sys.argv) == 2:
+  server = sys.argv[1]
+
+if len(sys.argv) == 3:
+  server = sys.argv[1]
+  psfile = sys.argv[2]
+  script = open(psfile)
+  psscript = script.read()
+  encoded_ps = b64encode(psscript.encode('utf_16_le')).decode('ascii')
+  p = Protocol(
+    endpoint='https://'+server+':5986/wsman',
+    transport='kerberos',
+    username=None,
+    password=None,
+    server_cert_validation='ignore')
+  shell_id = p.open_shell()
+  command_id = p.run_command(shell_id, 'powershell -encodedcommand {0}'.format(encoded_ps), '')
+  std_out, std_err, status_code = p.get_command_output(shell_id, command_id)
+  print std_out+std_err
+  p.cleanup_command(shell_id, command_id)
+  p.close_shell(shell_id)
+  sys.exit(0)
+
+if len(sys.argv) > 3:
+  print_usage()
+  sys.exit(0)
+
 p = Protocol(
     endpoint='https://'+server+':5986/wsman',
     transport='kerberos',
