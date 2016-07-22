@@ -15,9 +15,8 @@ Packages:
 * requests-kerberos
 
 <h2>Status</h2>
-* Only works for single commands
+* Context between commands is not saved
  
 <h3>ToDos</h3>
-* ps scripts support
 * autocomplete
 * Directory switching
