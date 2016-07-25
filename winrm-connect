@@ -56,12 +56,12 @@ p = Protocol(
 
 console_string = "["+server+"]: CMD >"
 shell_id = p.open_shell()
+print "shell_id="+shell_id
 ## shell is either cmd or ps
 current_shell = "cmd"
 while True:
   runcommand = raw_input(console_string)
   runcommand.strip()
-  command_id = p.run_command(shell_id, runcommand, '')
   if runcommand == 'exit':
     if current_shell == "cmd":
       break
