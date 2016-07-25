@@ -1,4 +1,7 @@
 # winrm-connect
+Early alpha! Pleade be careful!
+Connects via Kerberos to target server.
+
 CMD/Powershell remote connector for Linux
 
 Usage: winrm-connect SERVERNAME<br />
