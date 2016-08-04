@@ -4,7 +4,7 @@ Connects via Kerberos to target server.
 
 CMD/Powershell remote connector for Linux
 
-Usage: winrm-connect SERVERNAME<br />
+Usage: winrm-connect SERVER [SCRIPT [ARG]]<br />
 When connected type ps/powershell to switch to powershell context.<br />
 When in powershell context type exit to switch back to cmd.<br />
 
